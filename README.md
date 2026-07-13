@@ -75,7 +75,7 @@ This project includes Specmatic contract tests (Gradle-native, JUnit5) that vali
 
 ## Running the contract tests
 1. Start the app: .\gradlew bootRun
-2. In a separate terminal: .\gradlew test --tests "io.spring.contract.ContractTests"
+2. In a separate terminal: .\gradlew contractTest
 
 ## Known limitations (as of first integration)
 Of 30 generated scenarios, 3 pass and 27 fail. These are expected limitations, not integration bugs:

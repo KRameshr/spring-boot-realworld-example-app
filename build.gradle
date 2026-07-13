@@ -54,12 +54,12 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.2.2'
-    testImplementation 'io.specmatic:junit5-support:2.42.2'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
 
 tasks.named('clean') {
     doFirst {
@@ -72,11 +72,31 @@ tasks.named('generateJava') {
     packageName = 'io.spring.graphql' // The package name to use to generate sources
 }
 
-configurations.all {
+
+sourceSets {
+    contractTest {
+        java.srcDir 'src/contractTest/java'
+    }
+}
+
+dependencies {
+    contractTestImplementation 'io.specmatic:junit5-support:2.42.2'
+    contractTestImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+}
+
+task contractTest(type: Test) {
+    description = 'Runs Specmatic contract tests against a running instance of the app'
+    group = 'verification'
+    testClassesDirs = sourceSets.contractTest.output.classesDirs
+    classpath = sourceSets.contractTest.runtimeClasspath
+    useJUnitPlatform()
+}
+
+configurations.matching { it.name.startsWith('contractTest') }.configureEach {
     resolutionStrategy.eachDependency { details ->
         if (details.requested.group == 'org.jetbrains.kotlin' && details.requested.name.startsWith('kotlin-stdlib')) {
             details.useVersion('2.3.10')
-            details.because('Specmatic requires Kotlin 1.9+ stdlib for EnumEntriesKt')
+            details.because('Specmatic requires Kotlin 1.9+ stdlib for EnumEntriesKt - isolated to contractTest classpath only')
         }
     }
 }
