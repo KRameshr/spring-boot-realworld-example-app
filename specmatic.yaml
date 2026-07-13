@@ -1,0 +1,15 @@
+version: 3
+systemUnderTest:
+  service:
+    description: RealWorld Conduit API (spring-boot-realworld-example-app)
+    definitions:
+      - definition:
+          specs:
+            - openapi.yml
+          source:
+            filesystem:
+              directory: src/main/resources/openapi
+    runOptions:
+      openapi:
+        type: test
+        baseUrl: http://localhost:8080

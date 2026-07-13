@@ -71,3 +71,12 @@ tasks.named('generateJava') {
     schemaPaths = ["${projectDir}/src/main/resources/schema"] // List of directories containing schema files
     packageName = 'io.spring.graphql' // The package name to use to generate sources
 }
+
+configurations.all {
+    resolutionStrategy.eachDependency { details ->
+        if (details.requested.group == 'org.jetbrains.kotlin' && details.requested.name.startsWith('kotlin-stdlib')) {
+            details.useVersion('2.3.10')
+            details.because('Specmatic requires Kotlin 1.9+ stdlib for EnumEntriesKt')
+        }
+    }
+}

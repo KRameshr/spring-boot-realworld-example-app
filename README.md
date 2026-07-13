@@ -70,6 +70,22 @@ The repository contains a lot of test cases to cover both api test and repositor
 
     ./gradlew test
 
+# Specmatic Contract Testing
+This project includes Specmatic contract tests (Gradle-native, JUnit5) that validate the running application against the RealWorld OpenAPI specification.
+
+## Running the contract tests
+1. Start the app: .\gradlew bootRun
+2. In a separate terminal: .\gradlew test --tests "io.spring.contract.ContractTests"
+
+## Known limitations (as of first integration)
+Of 30 generated scenarios, 3 pass and 27 fail. These are expected limitations, not integration bugs:
+- 401 Unauthorized (majority): Specmatic does not automatically perform login and carry forward a JWT token for subsequent authenticated requests.
+- 422 on login/register: Generated example values (from the spec) do not always satisfy the app validation rules.
+- 404 on profile/article GET: Specmatic generates example usernames/slugs that do not exist in a fresh database.
+- 400 on articles query params: Edge cases in generated query parameter combinations.
+
+Addressing these (e.g. via Specmatic external examples with valid login credentials, or dictionary-based value substitution) is tracked as a follow-up.
+
 # Code format
 
 Use spotless for code format.
